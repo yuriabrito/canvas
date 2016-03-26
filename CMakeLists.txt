@@ -9,18 +9,10 @@ include_directories(.)
 set(tests_SRC)
 set(tests_LIBS)
 
-FUNCTION(PREPEND var prefix)
-  SET(listVar "")
-  FOREACH(f ${ARGN})
-    LIST(APPEND listVar "${prefix}/${f}")
-  ENDFOREACH(f)
-  SET(${var} "${listVar}" PARENT_SCOPE)
-ENDFUNCTION(PREPEND)
+include(CMakeHelpers.txt)
 
 add_subdirectory(util)
 add_subdirectory(tests)
-
-message("${tests_SRC}")
 
 add_executable(canvas main.cpp)
 
