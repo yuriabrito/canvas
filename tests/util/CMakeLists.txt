@@ -1,5 +1,6 @@
 set(util_SRC
   vec3_tests.cpp
+  ray_tests.cpp
   )
 
 PREPEND(final_util_SRC ${CMAKE_CURRENT_SOURCE_DIR} ${util_SRC})

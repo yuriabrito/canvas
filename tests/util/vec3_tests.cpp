@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 #include "tests/catch.hh"
 #include "util/vec3.h"
 

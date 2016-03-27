@@ -10,27 +10,27 @@ public:
   vec3() {}
   vec3(float a);
   vec3(float a, float b, float c);
-  const float operator[](int i) const;
+  float operator[](int i) const;
   float& operator[](int i);
   const vec3& operator+() const;
-  const vec3 operator+(const vec3& a) const;
+  vec3 operator+(const vec3& a) const;
   vec3& operator+=(const vec3& a);
-  const vec3 operator-() const;
-  const vec3 operator-(const vec3& a) const;
+  vec3 operator-() const;
+  vec3 operator-(const vec3& a) const;
   vec3& operator-=(const vec3& a);
-  const bool operator==(const vec3& a) const;
-  const float operator*(const vec3& a) const; // dot
-  const vec3 operator^(const vec3& a) const; // cross
+  bool operator==(const vec3& a) const;
+  float operator*(const vec3& a) const; // dot
+  vec3 operator^(const vec3& a) const; // cross
   vec3& operator*=(const float f);
   vec3& operator/=(const float f);
-  const float length() const;
-  const vec3 hat() const;
+  float length() const;
+  vec3 hat() const;
   void normalize();
 };
 
-const vec3 operator*(const vec3& v, const float a);
-const vec3 operator*(const float f, const vec3& v);
-const vec3 operator/(const vec3& v, const float a);
+vec3 operator*(const vec3& v, const float a);
+vec3 operator*(const float f, const vec3& v);
+vec3 operator/(const vec3& v, const float a);
 
 }
 

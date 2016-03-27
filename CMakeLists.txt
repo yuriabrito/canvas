@@ -15,6 +15,7 @@ add_subdirectory(util)
 add_subdirectory(tests)
 
 add_executable(canvas main.cpp)
+target_link_libraries(canvas util)
 
 add_executable(canvas_tests tests/tests.cpp ${tests_SRC})
 target_link_libraries(canvas_tests ${tests_LIBS})
