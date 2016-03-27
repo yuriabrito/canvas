@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 #include "tests/catch.hh"
 #include "util/vec3.h"
 
@@ -10,6 +11,7 @@ TEST_CASE("vec3 operations") {
   vec3 v1(1,2,3);
   vec3 v2(1,2,3);
   vec3 v3(3,6,9);
+  vec3 v4(3,2,1);
 
   SECTION("equivalence") {
     REQUIRE(v1 == v2);
@@ -49,6 +51,11 @@ TEST_CASE("vec3 operations") {
     REQUIRE(v1 * v2 == 1 + 4 + 9);
   }
 
+  SECTION("cross product") {
+    REQUIRE((v1 ^ v1) == vec3(0));
+    REQUIRE((v1 ^ v4) == vec3(-4,8,-4));
+  }
+
   SECTION("scalar product") {
     REQUIRE(v1 * 3 == vec3(3,6,9));
     REQUIRE(3 * v1 == vec3(3,6,9));
@@ -65,6 +72,15 @@ TEST_CASE("vec3 operations") {
 
   SECTION("length") {
     REQUIRE(fabs(sqrt(1+4+9) - v1.length()) <= ERR);
+  }
+
+  SECTION("hat") {
+    REQUIRE(v1.hat() == (v1 / v1.length()));
+  }
+
+  SECTION("normalize") {
+    v1.normalize();
+    REQUIRE(v1 == v2.hat());
   }
 }
 

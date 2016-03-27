@@ -57,6 +57,12 @@ const float vec3::operator*(const vec3& a) const {
   return v[0] * a.v[0] + v[1] * a.v[1] + v[2] * a.v[2];
 }
 
+const vec3 vec3::operator^(const vec3& a) const {
+  return vec3(v[1] * a.v[2] - v[2] * a.v[1],
+      -(v[0] * a.v[2] - v[2] * a.v[0]),
+      v[0] * a.v[1] - v[1] * a.v[0]);
+}
+
 vec3& vec3::operator*=(const float f) {
   v[0] *= f; v[1] *= f; v[2] *= f;
   return *this;
@@ -69,6 +75,16 @@ vec3& vec3::operator/=(const float f) {
 
 const float vec3::length() const {
   return sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+}
+
+const vec3 vec3::hat() const {
+  float l_inv = 1.0f / length();
+  return *this * l_inv;
+}
+
+void vec3::normalize() {
+  float l_inv = 1.0f / length();
+  v[0] *= l_inv; v[1] *= l_inv; v[2] *= l_inv;
 }
 
 const vec3 operator*(const vec3& v, const float f) {

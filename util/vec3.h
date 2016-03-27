@@ -19,10 +19,13 @@ public:
   const vec3 operator-(const vec3& a) const;
   vec3& operator-=(const vec3& a);
   const bool operator==(const vec3& a) const;
-  const float operator*(const vec3& a) const;
+  const float operator*(const vec3& a) const; // dot
+  const vec3 operator^(const vec3& a) const; // cross
   vec3& operator*=(const float f);
   vec3& operator/=(const float f);
   const float length() const;
+  const vec3 hat() const;
+  void normalize();
 };
 
 const vec3 operator*(const vec3& v, const float a);
