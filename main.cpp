@@ -50,10 +50,7 @@ int main() {
   Hitable* el_2 = new Sphere(vec3(0,-100.5,-1), 100, new Lambertian(vec3(0, 0, 1.0)));
   Hitable* el_3 = new Sphere(vec3(1,0,-1), 0.5, new Metal(vec3(0.8, 0.6, 0.2), 0.1));
   Hitable* el_4 = new Sphere(vec3(-1,0,-1), 0.5, new Metal(vec3(0.8, 0.8, 0.8), 0.8));
-  world += el_1;
-  world += el_2;
-  world += el_3;
-  world += el_4;
+  world = {el_1, el_2, el_3, el_4};
 
   Camera camera;
   

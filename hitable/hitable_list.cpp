@@ -16,8 +16,19 @@ bool HitableList::hit(const ray& r, float t_min, float t_max, hit_record& rec) c
   return hit_anything;
 }
 
-void HitableList::operator+=(Hitable* el) {
+HitableList& HitableList::operator+=(Hitable* el) {
   list.push_back(el);
+  return *this;
+}
+
+HitableList& HitableList::operator=(const std::vector<Hitable*>& v) {
+  list = v;
+  return *this;
+}
+
+HitableList& HitableList::operator+=(const std::vector<Hitable*>& v) {
+  list.insert(std::end(list), std::begin(v), std::end(v));
+  return *this;
 }
 
 }

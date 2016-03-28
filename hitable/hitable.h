@@ -1,6 +1,7 @@
 #ifndef HITABLE_HITABLEH
 #define HITABLE_HITABLEH
 
+#include <vector>
 #include "util/vec3.h"
 #include "util/ray.h"
 
@@ -23,6 +24,7 @@ public:
   Hitable(Material* material_ptr) : material_ptr(material_ptr) {}
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const = 0;
 };
+
 
 }
 
