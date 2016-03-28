@@ -42,7 +42,7 @@ vec3 color(const ray& r, Hitable* world, int depth) {
 int main() {
   int nx = 800;
   int ny = 600;
-  int ns = 256;
+  int ns = 4;
   cout << "P3\n" << nx << " " << ny << "\n255\n";
 
   HitableList world;

@@ -1,9 +1,8 @@
+#include "util/helpers.h"
 #include "metal.h"
 #include <iostream>
 
 namespace canvas {
-
-vec3 random_in_unit_sphere();
 
 vec3 reflect(const vec3& v, const vec3& n) {
   return v - 2.0 * (v * n) * n;
