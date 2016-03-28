@@ -6,6 +6,8 @@
 #include "hitable/hitable_list.h"
 #include "hitable/sphere.h"
 #include "camera/camera.h"
+#include "material/lambertian.h"
+#include "material/metal.h"
 
 using std::cout;
 using canvas::vec3;
@@ -15,25 +17,25 @@ using canvas::Hitable;
 using canvas::HitableList;
 using canvas::Sphere;
 using canvas::Camera;
+using canvas::Lambertian;
+using canvas::Metal;
 
-vec3 random_in_unit_sphere() {
-  vec3 p;
-  do {
-    p = 2.0 * vec3(drand48(), drand48(), drand48()) - vec3(1,1,1);
-  } while(p * p >= 1.0);
-  return p;
-}
-
-vec3 color(const ray& r, Hitable* world) {
+vec3 color(const ray& r, Hitable* world, int depth) {
   hit_record rec;
-  if(world->hit(r, 0.0, MAXFLOAT, rec)) {
-    vec3 target = rec.p + rec.normal + random_in_unit_sphere();
-    return 0.5 * color(ray(rec.p, target - rec.p), world);
+  if(world->hit(r, 0.001, MAXFLOAT, rec)) {
+    ray scattered;
+    vec3 attenuation;
+    if(depth < 2 && rec.material_ptr->scatter(r, rec, attenuation, scattered)) {
+      return attenuation % color(scattered, world, depth+1);
+    }
+    else {
+      return vec3(0);
+    }
   }
   else {
     vec3 hat = r.d.hat();
     float t = 0.5 * (hat[1] + 1.0);
-    return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
+    return (1.0 - t) * vec3(1.0) + t * vec3(0.5, 0.7, 1.0);
   }
 }
 
@@ -44,10 +46,14 @@ int main() {
   cout << "P3\n" << nx << " " << ny << "\n255\n";
 
   HitableList world;
-  Hitable* el_1 = new Sphere(vec3(0,0,-1), 0.5);
-  Hitable* el_2 = new Sphere(vec3(0,-100.5,-1), 100);
+  Hitable* el_1 = new Sphere(vec3(0,0,-1), 0.5, new Lambertian(vec3(1.0, 0, 0)));
+  Hitable* el_2 = new Sphere(vec3(0,-100.5,-1), 100, new Lambertian(vec3(0, 0, 1.0)));
+  Hitable* el_3 = new Sphere(vec3(1,0,-1), 0.5, new Metal(vec3(0.8, 0.6, 0.2), 0.1));
+  Hitable* el_4 = new Sphere(vec3(-1,0,-1), 0.5, new Metal(vec3(0.8, 0.8, 0.8), 0.8));
   world += el_1;
   world += el_2;
+  world += el_3;
+  world += el_4;
 
   Camera camera;
   
@@ -58,7 +64,7 @@ int main() {
         float u = float(i + drand48()) / float(nx);
         float v = float(j + drand48()) / float(ny);
         ray r = camera.getRay(u, v);
-        col += color(r, &world); 
+        col += color(r, &world, 0); 
       }
       col /= float(ns);
       col = vec3(sqrt(col[0]), sqrt(col[1]), sqrt(col[2]));

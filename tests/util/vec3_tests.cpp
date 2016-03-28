@@ -55,6 +55,10 @@ TEST_CASE("vec3 operations") {
     REQUIRE((v1 ^ v4) == vec3(-4,8,-4));
   }
 
+  SECTION("% product") {
+    REQUIRE(v1 % v1 == vec3(1,4,9));
+  }
+
   SECTION("scalar product") {
     REQUIRE(v1 * 3 == vec3(3,6,9));
     REQUIRE(3 * v1 == vec3(3,6,9));

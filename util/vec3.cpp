@@ -53,6 +53,10 @@ bool vec3::operator==(const vec3& a) const {
   return fabs(v[0] - a.v[0]) <= ERR && fabs(v[1] - a.v[1]) <= ERR && fabs(v[2] - a.v[2]) <= ERR;
 }
 
+vec3 vec3::operator%(const vec3& a) const {
+  return vec3(v[0] * a.v[0], v[1] * a.v[1], v[2] * a.v[2]);
+}
+
 float vec3::operator*(const vec3& a) const {
   return v[0] * a.v[0] + v[1] * a.v[1] + v[2] * a.v[2];
 }
@@ -65,6 +69,11 @@ vec3 vec3::operator^(const vec3& a) const {
 
 vec3& vec3::operator*=(const float f) {
   v[0] *= f; v[1] *= f; v[2] *= f;
+  return *this;
+}
+
+vec3& vec3::operator%=(const vec3& a) {
+  v[0] *= a.v[0]; v[1] *= a.v[1]; v[2] *= a.v[2];
   return *this;
 }
 

@@ -19,9 +19,11 @@ public:
   vec3 operator-(const vec3& a) const;
   vec3& operator-=(const vec3& a);
   bool operator==(const vec3& a) const;
+  vec3 operator%(const vec3& a) const;
   float operator*(const vec3& a) const; // dot
   vec3 operator^(const vec3& a) const; // cross
   vec3& operator*=(const float f);
+  vec3& operator%=(const vec3& a);
   vec3& operator/=(const float f);
   float length() const;
   vec3 hat() const;

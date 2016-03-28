@@ -14,10 +14,11 @@ include(CMakeHelpers.txt)
 add_subdirectory(util)
 add_subdirectory(hitable)
 add_subdirectory(camera)
+add_subdirectory(material)
 add_subdirectory(tests)
 
 add_executable(canvas main.cpp)
-target_link_libraries(canvas util hitable camera)
+target_link_libraries(canvas util hitable camera material)
 
 add_executable(canvas_tests tests/tests.cpp ${tests_SRC})
 target_link_libraries(canvas_tests ${tests_LIBS})
