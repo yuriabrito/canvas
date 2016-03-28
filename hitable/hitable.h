@@ -12,7 +12,7 @@ struct hit_record {
   vec3 normal;
 };
 
-class hitable {
+class Hitable {
 public:
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const = 0;
 };

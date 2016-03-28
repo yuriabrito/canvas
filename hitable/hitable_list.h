@@ -6,13 +6,13 @@
 
 namespace canvas {
 
-class hitable_list : public hitable {
+class HitableList : public Hitable {
 public:
-  std::vector<hitable*> list;
+  std::vector<Hitable*> list;
 public:
-  hitable_list() {}
+  HitableList() {}
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
-  void operator+=(hitable* el);
+  void operator+=(Hitable* el);
 };
 
 }

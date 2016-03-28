@@ -5,13 +5,13 @@
 
 namespace canvas {
 
-class sphere : public hitable {
+class Sphere : public Hitable {
 public:
   vec3 center;
   float radius;
 public:
-  sphere() {}
-  sphere(const vec3& c, const float r);
+  Sphere() {}
+  Sphere(const vec3& c, const float r);
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
 };
 

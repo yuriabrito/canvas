@@ -3,9 +3,9 @@
 
 namespace canvas {
 
-sphere::sphere(const vec3& c, const float r) : center(c), radius(r) {}
+Sphere::Sphere(const vec3& c, const float r) : center(c), radius(r) {}
 
-bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
+bool Sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
   vec3 oc = r.o - center;
   float a = r.d * r.d;
   float b = oc * r.d;

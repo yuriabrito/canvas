@@ -5,16 +5,18 @@
 #include "hitable/hitable.h"
 #include "hitable/hitable_list.h"
 #include "hitable/sphere.h"
+#include "camera/camera.h"
 
 using std::cout;
 using canvas::vec3;
 using canvas::ray;
-using canvas::hitable;
 using canvas::hit_record;
-using canvas::hitable_list;
-using canvas::sphere;
+using canvas::Hitable;
+using canvas::HitableList;
+using canvas::Sphere;
+using canvas::Camera;
 
-vec3 color(const ray& r, hitable* world) {
+vec3 color(const ray& r, Hitable* world) {
   hit_record rec;
   if(world->hit(r, 0.0, MAXFLOAT, rec)) {
     return 0.5 * (rec.normal + vec3(1.0));
@@ -29,24 +31,31 @@ vec3 color(const ray& r, hitable* world) {
 int main() {
   int nx = 800;
   int ny = 600;
+  int ns = 64;
   cout << "P3\n" << nx << " " << ny << "\n255\n";
   vec3 lower_left_corner(-1.333, -1.0, -1.0);
   vec3 horizontal(2.666, 0.0, 0.0);
   vec3 vertical(0.0, 2.0, 0.0);
   vec3 origin(0.0, 0.0, 0.0);
 
-  hitable_list world;
-  hitable* el_1 = new sphere(vec3(0,0,-1), 0.5);
-  hitable* el_2 = new sphere(vec3(0,-100.5,-1), 100);
+  HitableList world;
+  Hitable* el_1 = new Sphere(vec3(0,0,-1), 0.5);
+  Hitable* el_2 = new Sphere(vec3(0,-100.5,-1), 100);
   world += el_1;
   world += el_2;
 
+  Camera camera;
+  
   for(int j = ny - 1; j >= 0; j--) {
     for(int i = 0; i < nx; i++) {
-      float u = float(i) / float(nx);
-      float v = float(j) / float(ny);
-      ray r(origin, lower_left_corner + u * horizontal + v * vertical);
-      vec3 col = color(r, &world);
+      vec3 col(0,0,0);
+      for(int s = 0; s < ns; s++) {
+        float u = float(i + drand48()) / float(nx);
+        float v = float(j + drand48()) / float(ny);
+        ray r = camera.getRay(u, v);
+        col += color(r, &world); 
+      }
+      col /= float(ns);
       int ir = int(255.99 * col[0]);
       int ig = int(255.99 * col[1]);
       int ib = int(255.99 * col[2]);
