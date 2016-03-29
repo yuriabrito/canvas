@@ -27,7 +27,7 @@ vec3 color(const ray& r, Hitable* world, int depth) {
   if(world->hit(r, 0.001, MAXFLOAT, rec)) {
     ray scattered;
     vec3 attenuation;
-    if(depth < 100 && rec.material_ptr->scatter(r, rec, attenuation, scattered)) {
+    if(depth < 50 && rec.material_ptr->scatter(r, rec, attenuation, scattered)) {
       return attenuation % color(scattered, world, depth+1);
     }
     else {
@@ -44,7 +44,7 @@ vec3 color(const ray& r, Hitable* world, int depth) {
 int main() {
   int nx = 800;
   int ny = 600;
-  int ns = 625;
+  int ns = 64;
   cout << "P3\n" << nx << " " << ny << "\n255\n";
 
   HitableList world;
@@ -56,7 +56,7 @@ int main() {
   Hitable* el_5 = new Sphere(vec3(0,1,-2), 0.5, new Lambertian(vec3(0.5, 0.0, 0.0)));
   world = {el_1, el_11, el_2, el_3, el_4, el_5};
 
-  Camera camera;
+  Camera camera(vec3(-2,2,1), vec3(0,0,-1), vec3(0,1,0), 45, float(nx) / float(ny));
   
   for(int j = ny - 1; j >= 0; j--) {
     for(int i = 0; i < nx; i++) {
