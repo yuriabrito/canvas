@@ -15,7 +15,7 @@ bool Sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const 
   float b = oc * r.d;
   float c = oc * oc - radius * radius;
   float discriminant = b * b - a * c;
-  if(discriminant > 0) {
+  if(discriminant > 0.0001) {
     float t = (-b - sqrt(discriminant)) / a;
     if(t < t_max && t > t_min) {
       rec.t = t;
