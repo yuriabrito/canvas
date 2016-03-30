@@ -5,6 +5,7 @@ set(hitable_SRC
   hitable_list.cpp hitable_list.h
   sphere.cpp sphere.h
   plane.cpp plane.h
+  rectangle.cpp rectangle.h
   )
 
 add_library(hitable ${hitable_SRC})
