@@ -2,7 +2,18 @@
 
 namespace canvas {
 
-Plane::Plane(Material* material_ptr) : Hitable(material_ptr) {}
+void Plane::create() {
+  point = vec3(0);
+  normal = vec3(0,1,0);
+}
+
+Plane::Plane() {
+  create();
+}
+
+Plane::Plane(Material* material_ptr) : Hitable(material_ptr) {
+  create();
+}
 
 Plane::Plane(const vec3& point, const vec3& normal) : point(point), normal(normal) {}
 

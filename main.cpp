@@ -7,6 +7,7 @@
 #include "hitable/sphere.h"
 #include "hitable/plane.h"
 #include "hitable/rectangle.h"
+#include "hitable/cube.h"
 #include "camera/camera.h"
 #include "material/lambertian.h"
 #include "material/metal.h"
@@ -21,6 +22,7 @@ using canvas::HitableList;
 using canvas::Sphere;
 using canvas::Plane;
 using canvas::Rectangle;
+using canvas::Cube;
 using canvas::Camera;
 using canvas::Lambertian;
 using canvas::Metal;
@@ -48,7 +50,7 @@ vec3 color(const ray& r, Hitable* world, int depth) {
 int main() {
   int nx = 800;
   int ny = 600;
-  int ns = 50;
+  int ns = 100;
   cout << "P3\n" << nx << " " << ny << "\n255\n";
 
   HitableList world;
@@ -59,12 +61,11 @@ int main() {
   Hitable* el_4 = new Sphere(vec3(-1,0,-1), 0.5, new Lambertian(vec3(0.1, 0.2, 0.5)));
   Hitable* el_5 = new Sphere(vec3(0,1,-2), 0.5, new Lambertian(vec3(0.5, 0.0, 0.0)));
 
-  vec3 corner(-0.5,0,-0.5);
-  vec3 a = vec3(1,0,0);
-  vec3 b = vec3(0,0,1);
-
-  Hitable* el_6 = new Rectangle(corner, a, b, new Lambertian(vec3(0.3)));
-  world = {el_1, el_11, el_2, el_3, el_4, el_5, el_6};
+  //Hitable* el_6 = new Rectangle(corner, a, b, new Lambertian(vec3(0.3)));
+  
+  Hitable* el_6 = new Cube(vec3(0,0,-1), 0.25, new Lambertian(vec3(0.5,0,0.5)));
+  Hitable* el_7 = new Rectangle(new Lambertian(vec3(0.8, 0, 0.3)));
+  world = {el_1, el_11, el_2, el_3, el_4, el_5, el_6, el_7};
   
   Camera camera(vec3(-2,2,1), vec3(0,0,-1), vec3(0,1,0), 60, float(nx) / float(ny));
   

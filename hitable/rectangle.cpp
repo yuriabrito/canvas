@@ -3,20 +3,30 @@
 
 namespace canvas {
 
-Rectangle::Rectangle(Material* material_ptr) : Hitable(material_ptr) {}
-
-Rectangle::Rectangle(const vec3& corner, const vec3& a, const vec3& b) : corner(corner), a(a), b(b) {
+void Rectangle::create(const vec3& corner, const vec3& a, const vec3& b) {
+  this->a = a;
+  this->b = b;
+  this->corner = corner;
   normal = a ^ b;
   normal.normalize();
   a_len_sq = a.length() * a.length();
   b_len_sq = b.length() * b.length();
 }
 
-Rectangle::Rectangle(const vec3& corner, const vec3& a, const vec3& b, Material* material_ptr) : corner(corner), a(a), b(b), Hitable(material_ptr) {
-  normal = a ^ b;
-  normal.normalize();
-  a_len_sq = a.length() * a.length();
-  b_len_sq = b.length() * b.length();
+Rectangle::Rectangle() {
+  create(vec3(-0.5, 0, -0.5), vec3(1,0,0), vec3(0,0,1));
+}
+
+Rectangle::Rectangle(Material* material_ptr) : Rectangle() {
+  this->material_ptr = material_ptr;
+}
+
+Rectangle::Rectangle(const vec3& corner, const vec3& a, const vec3& b) {
+  create(corner, a, b);
+}
+
+Rectangle::Rectangle(const vec3& corner, const vec3& a, const vec3& b, Material* material_ptr) : Rectangle(corner, a, b) {
+  this->material_ptr = material_ptr;
 }
 
 bool Rectangle::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
