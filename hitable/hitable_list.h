@@ -12,6 +12,7 @@ public:
 public:
   HitableList() {}
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
+  bool shadowHit(const ray& r, float& t_min) const;
   HitableList& operator+=(Hitable* el);
   HitableList& operator=(const std::vector<Hitable*>& v);
   HitableList& operator+=(const std::vector<Hitable*>& v);

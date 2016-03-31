@@ -18,7 +18,13 @@ vec3 color(const ray& r, const Scene& scene, int depth) {
       for(const auto& light : scene.lights) {
         vec3 wi = light->getDirection(rec);
         float ndotwi = rec.normal * wi;
-        if(ndotwi > 0.0) attenuation += attenuation % light->L(rec) * ndotwi;
+
+        if(ndotwi < 0.001) continue;
+
+        ray shadow_ray(rec.p, wi);
+        bool in_shadow = light->inShadow(shadow_ray, scene.world);
+
+        if(!in_shadow) attenuation += attenuation % light->L(rec) * ndotwi;
       }
       return attenuation % color(scattered, scene, depth+1);
     }

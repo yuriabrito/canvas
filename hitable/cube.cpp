@@ -38,4 +38,8 @@ bool Cube::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
   return list.hit(r, t_min, t_max, rec);
 }
 
+bool Cube::shadowHit(const ray& r, float& t_min) const {
+  return list.shadowHit(r, t_min);
+}
+
 }

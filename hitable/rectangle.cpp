@@ -50,4 +50,23 @@ bool Rectangle::hit(const ray& r, float t_min, float t_max, hit_record& rec) con
   return true;
 }
 
+bool Rectangle::shadowHit(const ray& r, float& t_min) const {
+  float t = normal * (corner - r.o) / (normal * r.d);
+
+  if(t < 0.0 && t > t_min) return false;
+
+  vec3 p = r.point_at_parameter(t);
+  vec3 d = p - corner;
+
+  float ddota = d * a;
+  if(ddota < 0.0 ||  ddota > a_len_sq) return false;
+
+  float ddotb = d * b;
+  if(ddotb < 0.0 ||  ddotb > b_len_sq) return false;
+
+  t_min = t;
+
+  return true;
+}
+
 }

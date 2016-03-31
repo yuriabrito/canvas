@@ -14,6 +14,7 @@ public:
   AmbientLight(const vec3& color, float ls);
   virtual vec3 getDirection(hit_record& rec);
   virtual vec3 L(hit_record& rec);
+  virtual bool inShadow(const ray& r, const HitableList& world) const;
 };
 
 }

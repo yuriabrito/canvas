@@ -14,4 +14,8 @@ vec3 AmbientLight::L(hit_record& rec) {
   return ls * color;
 }
 
+bool AmbientLight::inShadow(const ray& r, const HitableList& world) const {
+  return false;
+}
+
 }

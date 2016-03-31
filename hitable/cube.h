@@ -18,6 +18,7 @@ public:
   Cube(const vec3& point, float size);
   Cube(const vec3& point, float size, Material* material_ptr);
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
+  virtual bool shadowHit(const ray& r, float& t_min) const;
 private:
   void create(const vec3& point, float size);
 };

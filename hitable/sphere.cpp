@@ -37,4 +37,26 @@ bool Sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const 
   return false;
 }
 
+bool Sphere::shadowHit(const ray& r, float& t_min) const {
+  vec3 oc = r.o - center;
+  float a = r.d * r.d;
+  float b = oc * r.d;
+  float c = oc * oc - radius * radius;
+  float discriminant = b * b - a * c;
+  if(discriminant > 0.001) {
+    discriminant = sqrt(discriminant);
+    float t = (-b - discriminant) / a;
+    if(t > 0.001 && t < t_min) {
+      t_min = t;
+      return true;
+    }
+    t = (-b + discriminant) / a;
+    if(t > 0.001 && t < t_min) {
+      t_min = t;
+      return true;
+    }
+  }
+  return false;
+}
+
 }

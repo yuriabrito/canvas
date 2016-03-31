@@ -20,6 +20,7 @@ public:
   Rectangle(const vec3& corner, const vec3& a, const vec3& b);
   Rectangle(const vec3& corner, const vec3& a, const vec3& b, Material* material_ptr);
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
+  virtual bool shadowHit(const ray& r, float& t_min) const;
 private:
   void create(const vec3& corner, const vec3& a, const vec3& b);
 };

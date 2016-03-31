@@ -16,6 +16,14 @@ bool HitableList::hit(const ray& r, float t_min, float t_max, hit_record& rec) c
   return hit_anything;
 }
 
+bool HitableList::shadowHit(const ray& r, float& t_min) const {
+  bool hit_anything = false;
+  for(auto& h : list) if(h->shadowHit(r, t_min)) {
+    hit_anything = true;
+  }
+  return hit_anything;
+}
+
 HitableList& HitableList::operator+=(Hitable* el) {
   list.push_back(el);
   return *this;
