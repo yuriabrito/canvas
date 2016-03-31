@@ -7,7 +7,7 @@
 namespace canvas {
 
 class Image {
-private:
+public:
   std::vector< std::vector<vec3> > rgb;
   float width;
   float height;

@@ -17,7 +17,7 @@ Camera::Camera(const vec3& lookfrom, const vec3& lookat, const vec3& up, float v
   vertical = 2.0 * half_height * v;
 }
 
-ray Camera::getRay(float u, float v) {
+ray Camera::getRay(float u, float v) const {
   return ray(origin, lower_left_corner + u * horizontal + v * vertical - origin);
 }
 

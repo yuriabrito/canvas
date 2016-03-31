@@ -14,7 +14,7 @@ public:
   vec3 vertical;
 public:
   Camera(const vec3& lookfrom, const vec3& lookat, const vec3& up, float vfov, float aspect_ratio);
-  ray getRay(float u, float v);
+  ray getRay(float u, float v) const;
 };
 
 }
