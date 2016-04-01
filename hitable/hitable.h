@@ -23,7 +23,6 @@ public:
   Hitable() : material_ptr(nullptr) {}
   Hitable(Material* material_ptr) : material_ptr(material_ptr) {}
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const = 0;
-  virtual bool shadowHit(const ray& r, float& t_min) const = 0;
 };
 
 

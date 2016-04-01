@@ -29,8 +29,8 @@ private:
 public:
   Coordinator(int width, int height) : x(0), width(width), y(height - 1), height(height) {} 
   Job nextJob() {
-    if(y < 0) return {-1, -1};
     std::lock_guard<std::mutex> lock(m);
+    if(y < 0) return {-1, -1};
     Job job = {x, y};
     if(++x == width) {
       x = 0;

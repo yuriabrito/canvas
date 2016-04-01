@@ -15,7 +15,6 @@ public:
   Sphere(const vec3& c, const float r);
   Sphere(const vec3& c, const float r, Material* material_ptr);
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
-  virtual bool shadowHit(const ray& r, float& t_min) const;
 };
 
 }
