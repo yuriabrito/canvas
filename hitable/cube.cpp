@@ -31,6 +31,7 @@ Cube::Cube(const vec3& point, float size) : point(point), size(size) {
 }
 
 Cube::Cube(const vec3& point, float size, Material* material_ptr) : Cube(point, size) {
+  this->material_ptr = material_ptr;
   for(auto& h : list.list) h->material_ptr = material_ptr;
 }
 

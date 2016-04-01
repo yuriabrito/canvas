@@ -10,6 +10,9 @@ namespace canvas {
 class Material {
 public:
   virtual bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const = 0;
+  virtual bool transmit() const {
+    return false;
+  }
 };
 
 }

@@ -5,7 +5,7 @@
 
 namespace canvas {
 
-Dielectric::Dielectric(float ref_idx) : ref_idx(ref_idx) {}
+Dielectric::Dielectric(float ref_idx, float transmissivity) : ref_idx(ref_idx), transmissivity(transmissivity) {}
 
 float schlick(float cosine, float ref_idx) {
   float r0 = (1.0 - ref_idx) / (1 + ref_idx);
@@ -49,6 +49,10 @@ bool Dielectric::scatter(const ray& r_in, const hit_record& rec, vec3& attenuati
     scattered = ray(rec.p, refracted);
   }
   return true;
+}
+
+bool Dielectric::transmit() const {
+  return (transmissivity < drand48() ? true : false);
 }
 
 }

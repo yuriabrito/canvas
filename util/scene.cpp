@@ -9,14 +9,14 @@
 namespace canvas {
 
 void Scene::build() {
-  Hitable* el_1 = new Sphere(vec3(0,0,-1), 0.5, new Dielectric(1.005));
+  Hitable* el_1 = new Sphere(vec3(0,0,-1), 0.5, new Dielectric(2.2, 0.4));
   Hitable* el_2 = new Sphere(vec3(0,-100.5,-1), 100, new Lambertian(vec3(1.0)));
   Hitable* el_3 = new Sphere(vec3(1,0,-1), 0.5, new Metal(vec3(0.8, 0.6, 0.2), 0.2));
   Hitable* el_4 = new Sphere(vec3(-1,0,-1), 0.5, new Lambertian(vec3(0.1, 0.2, 0.5)));
   Hitable* el_5 = new Sphere(vec3(0,1,-2), 0.5, new Lambertian(vec3(0.5, 0.0, 0.0)));
   Hitable* el_6 = new Cube(vec3(0,0,-1), 0.25, new Lambertian(vec3(0.5,0,0.5)));
 
-  world = {el_1, el_2, el_3, el_4};
+  world = {el_1, el_2, el_3, el_4, el_6};
   
   ambient_light = new AmbientLight(vec3(1), 0.5);
 
