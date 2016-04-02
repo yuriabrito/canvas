@@ -24,24 +24,44 @@ TriangleMesh* ObjParser::parse(std::string file_path) {
     exit(1);
   }
 
-  std::vector<vec3> vertices;
+  int i = 0;
+
+  size_t n_vertices = shapes[i].mesh.positions.size() / 3;
+  size_t n_faces = shapes[i].mesh.indices.size() / 3;
+
+  std::vector<vec3> vertices(n_vertices, vec3(0));
+  std::vector<vec3> v_normals(n_vertices, vec3(0));
+  //std::vector<vec3> f_normals(n_faces, vec3(0));
+  //std::vector<std::vector<unsigned int>> v_f(n_vertices, {});
   std::vector<std::array<unsigned int, 3>> faces;
 
-  int i = 0;
-  
-  for (size_t f = 0; f < shapes[i].mesh.indices.size() / 3; f++) {
-    faces.push_back({shapes[i].mesh.indices[3*f+0],
-        shapes[i].mesh.indices[3*f+1],
-        shapes[i].mesh.indices[3*f+2]});
-  }
-
-  for (size_t v = 0; v < shapes[i].mesh.positions.size() / 3; v++) {
-    vertices.push_back(vec3(shapes[i].mesh.positions[3*v+0],
+  for (size_t v = 0; v < n_vertices; v++) {
+    vertices[v] = vec3(shapes[i].mesh.positions[3*v+0],
       shapes[i].mesh.positions[3*v+1],
-      shapes[i].mesh.positions[3*v+2]));
+      shapes[i].mesh.positions[3*v+2]);
   }
 
-  return new TriangleMesh(vertices, faces);
+  for (size_t f = 0; f < n_faces; f++) {
+    unsigned int v0, v1, v2;
+    v0 = shapes[i].mesh.indices[3*f+0];
+    v1 = shapes[i].mesh.indices[3*f+1];
+    v2 = shapes[i].mesh.indices[3*f+2];
+    //v_f[v0].push_back(f);
+    //v_f[v1].push_back(f);
+    //v_f[v2].push_back(f);
+    // normal
+    vec3 normal = vertices[v0] ^ vertices[v1];
+    v_normals[v0] += normal;
+    v_normals[v1] += normal;
+    v_normals[v2] += normal;
+    faces.push_back({v0, v1, v2});
+  }
+
+  for(size_t v = 0; v < n_vertices; v++) {
+    v_normals[v].normalize();
+  }
+
+  return new TriangleMesh(vertices, v_normals, faces);
 }
 
 }

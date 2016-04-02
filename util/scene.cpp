@@ -27,7 +27,7 @@ void Scene::build() {
 
   ObjParser obj_parser;
 
-  Hitable* el_9 = obj_parser.parse("teapot.obj");
+  Hitable* el_9 = obj_parser.parse("gourd.obj");
   el_9->material_ptr = new Lambertian(vec3(0.5));
 
   /*
@@ -42,9 +42,10 @@ void Scene::build() {
   //world = {el_1, el_2, el_3, el_4, el_6};
   world = {el_3, el_9};
 
-  ambient_light = new AmbientLight(vec3(1), 0.6);
+  ambient_light = new AmbientLight(vec3(1), 1.0);
 
-  lights = { new PointLight(vec3(0.0, 4.0, 4), vec3(1.0), 2.25) }; 
+  lights = { new PointLight(vec3(0.0, 4.0, 4), vec3(1.0), 2.25) };
+  //lights = {};
 }
 
 void Scene::setWorld(std::vector<Hitable*> v_hitable) {

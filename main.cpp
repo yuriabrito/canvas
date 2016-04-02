@@ -20,7 +20,7 @@ using canvas::Worker;
 using canvas::Camera;
 
 void render(const Scene& scene, const Camera& camera, Image& image) {
-  int ns = 10;
+  int ns = 40;
   Coordinator coordinator(image.width, image.height);
   Worker worker;
 
@@ -34,15 +34,15 @@ void render(const Scene& scene, const Camera& camera, Image& image) {
 }
 
 int main() {
-  int nx = 300;
-  int ny = 200;
+  int nx = 400;
+  int ny = 300;
   
   Image image(nx, ny);
 
   Scene scene;
   scene.build();
 
-  Camera camera(vec3(0.5,4.5,2), vec3(0,0,-1), vec3(0,1,0), 75, float(nx) / float(ny));
+  Camera camera(vec3(-2.0,1.5,1.0), vec3(-0.5,0,-1), vec3(0,1,0), 75, float(nx) / float(ny));
 
   render(scene, camera, image);
   

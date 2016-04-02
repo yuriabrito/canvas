@@ -3,9 +3,9 @@
 
 namespace canvas {
 
-TriangleMesh::TriangleMesh(const std::vector<vec3>& vertices,
-    const std::vector<std::array<unsigned int, 3>>& faces) : vertices(vertices), faces(faces) {
-  flatTriangles();
+TriangleMesh::TriangleMesh(const std::vector<vec3>& vertices, const std::vector<vec3>& normals,
+    const std::vector<std::array<unsigned int, 3>>& faces) : vertices(vertices), normals(normals), faces(faces) {
+  //flatTriangles();
 }
 
 TriangleMesh::TriangleMesh(const std::vector<vec3>& vertices,
@@ -33,11 +33,11 @@ bool TriangleMesh::hit(const ray& r, float t_min, float t_max, hit_record& rec) 
 bool TriangleMesh::hitTriangle(const int face_index,
     const ray& r, float t_min, float t_max, hit_record& rec) const {
   std::array<unsigned int, 3> face = faces[face_index];
-  vec3 normal = normals[face_index];
+  //vec3 normal = normals[face_index];
   vec3 a, b, c;
-  a = vertices[face[0]];
-  b = vertices[face[1]];
-  c = vertices[face[2]];
+  a = vertices[face[0]]; // v0
+  b = vertices[face[1]]; // v1
+  c = vertices[face[2]]; // v2
 
   vec3 e1, e2;
   e1 = b - a;
@@ -45,23 +45,24 @@ bool TriangleMesh::hitTriangle(const int face_index,
 
   vec3 P = r.d ^ e2;
   float det = e1 * P;
-  if(det > -0.0001 && det < 0.0001) return false;
+  if(det > -0.00001 && det < 0.00001) return false;
 
   float inv_det = 1.0 / det;
 
   vec3 T = r.o - a;
 
   float u = (T * P) * inv_det;
-  if(u < 0.0 || u > 1.0) return false;
+  if(u < 0.00001 || u > 1.0) return false;
 
   vec3 Q = T ^ e1;
 
   float v = (r.d * Q) * inv_det;
-  if(v < 0.0 || u + v > 1.0) return false;
+  if(v < 0.00001 || u + v > 1.0) return false;
 
   float t = (e2 * Q) * inv_det;
 
   if(t > t_min) {
+    vec3 normal = (1-u-v) * normals[face[0]] + u * normals[face[1]] + v * normals[face[2]];
     rec.t = t;
     rec.p = r.point_at_parameter(t);
     rec.normal = normal;
@@ -72,7 +73,8 @@ bool TriangleMesh::hitTriangle(const int face_index,
   return false;
 }
 
-void TriangleMesh::smoothTriangles() {}
+void TriangleMesh::smoothTriangles() {
+}
 
 void TriangleMesh::flatTriangles() {
   for(int i = 0; i < faces.size(); i++) {
