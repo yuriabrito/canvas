@@ -6,20 +6,16 @@ Triangle::Triangle() {
   create(vec3(0,1,0), vec3(1.366, -1.366, 0), vec3(-1.366, -1.366, 0));
 }
 
-Triangle::Triangle(Material* material_ptr) : Hitable(material_ptr) {
-  create(vec3(0,1,0), vec3(1.366, -1.366, 0), vec3(-1.366, -1.366, 0));
+Triangle::Triangle(Material* material_ptr) : Triangle() {
+  this->material_ptr = material_ptr;
 }
 
 Triangle::Triangle(const vec3& a, const vec3& b, const vec3& c) {
   create(a, b, c);
 }
 
-Triangle::Triangle(const vec3& a, const vec3& b, const vec3& c, Material* material_ptr) : Hitable(material_ptr) {
-  //create(a, b, c);
-  this->a = a; this->b = b; this->c = c;
-  ba = b - a, cb = c - b, ac = a - c;
-  normal = - ba ^ ac;
-  normal.normalize();
+Triangle::Triangle(const vec3& a, const vec3& b, const vec3& c, Material* material_ptr) : Triangle(a,b,c) {
+  this->material_ptr = material_ptr;
 }
 
 bool Triangle::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
@@ -43,7 +39,7 @@ bool Triangle::hit(const ray& r, float t_min, float t_max, hit_record& rec) cons
 void Triangle::create(const vec3& a, const vec3& b, const vec3& c) {
   this->a = a; this->b = b; this->c = c;
   ba = b - a, cb = c - b, ac = a - c;
-  normal = ba ^ ac;
+  normal = - ba ^ ac;
   normal.normalize();
 }
 
