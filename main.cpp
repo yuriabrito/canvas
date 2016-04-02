@@ -42,7 +42,7 @@ int main() {
   Scene scene;
   scene.build();
 
-  Camera camera(vec3(-1.5,3,1.2), vec3(0,0,-1), vec3(0,1,0), 60, float(nx) / float(ny));
+  Camera camera(vec3(0.5,4.5,2), vec3(0,0,-1), vec3(0,1,0), 60, float(nx) / float(ny));
 
   render(scene, camera, image);
   

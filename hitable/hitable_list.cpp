@@ -2,6 +2,10 @@
 
 namespace canvas {
 
+HitableList::HitableList(std::vector<Hitable*>& v) : list(v), Hitable(nullptr) {}
+
+HitableList::HitableList(std::vector<Hitable*>& v, Material* material_ptr) : list(v), Hitable(material_ptr) {}
+
 bool HitableList::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
   hit_record tmp_rec;
   bool hit_anything = false;
@@ -13,6 +17,7 @@ bool HitableList::hit(const ray& r, float t_min, float t_max, hit_record& rec) c
       rec = tmp_rec;
     }
   }
+  if(hit_anything && material_ptr) rec.material_ptr = material_ptr; 
   return hit_anything;
 }
 

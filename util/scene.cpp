@@ -1,6 +1,10 @@
+#include <vector>
+#include <array>
+#include "util/vec3.h"
 #include "hitable/sphere.h"
 #include "hitable/cube.h"
 #include "hitable/triangle.h"
+#include "hitable/triangle_mesh.h"
 #include "material/lambertian.h"
 #include "material/metal.h"
 #include "material/dielectric.h"
@@ -17,9 +21,18 @@ void Scene::build() {
   Hitable* el_5 = new Sphere(vec3(0,1,-2), 0.5, new Lambertian(vec3(0.5, 0.0, 0.0)));
   Hitable* el_6 = new Cube(vec3(0,0,-1), 0.25, new Lambertian(vec3(0.5,0,0.5)));
   Hitable* el_7 = new Triangle(vec3(-1,0,-1), vec3(-1,-1,1), vec3(1,0,1), new Lambertian(vec3(1,0,0)));
+  Hitable* el_8 = new Triangle(vec3(1,0,1), vec3(1,-1,-1), vec3(-1,0,-1), new Lambertian(vec3(1,0,0)));
+
+  std::vector<vec3> vertices = {
+    vec3(-1,0,-1), vec3(-1,-1,1), vec3(1,0,1), vec3(1,-1,-1)
+  };
+
+  std::vector<std::array<int, 3>> faces = { {0,1,2}, {2,3,0} };
+
+  Hitable* el_9 = new TriangleMesh(vertices, faces, new Lambertian(vec3(0.5)));
 
   //world = {el_1, el_2, el_3, el_4, el_6};
-  world = {el_3, el_7};
+  world = {el_3, el_9};
 
   ambient_light = new AmbientLight(vec3(1), 0.5);
 
