@@ -6,6 +6,7 @@ set(hitable_SRC
   sphere.cpp sphere.h
   plane.cpp plane.h
   rectangle.cpp rectangle.h
+  triangle.cpp triangle.h
   cube.cpp cube.h
   )
 

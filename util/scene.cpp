@@ -1,5 +1,6 @@
 #include "hitable/sphere.h"
 #include "hitable/cube.h"
+#include "hitable/triangle.h"
 #include "material/lambertian.h"
 #include "material/metal.h"
 #include "material/dielectric.h"
@@ -15,9 +16,11 @@ void Scene::build() {
   Hitable* el_4 = new Sphere(vec3(-1,0,-1), 0.5, new Lambertian(vec3(0.1, 0.2, 0.5)));
   Hitable* el_5 = new Sphere(vec3(0,1,-2), 0.5, new Lambertian(vec3(0.5, 0.0, 0.0)));
   Hitable* el_6 = new Cube(vec3(0,0,-1), 0.25, new Lambertian(vec3(0.5,0,0.5)));
+  Hitable* el_7 = new Triangle(vec3(-1,0,-1), vec3(-1,-1,1), vec3(1,0,1), new Lambertian(vec3(1,0,0)));
 
-  world = {el_1, el_2, el_3, el_4, el_6};
-  
+  //world = {el_1, el_2, el_3, el_4, el_6};
+  world = {el_3, el_7};
+
   ambient_light = new AmbientLight(vec3(1), 0.5);
 
   lights = { new PointLight(vec3(0.0, 1.0, 0.5), vec3(1.0), 3.25) }; 
