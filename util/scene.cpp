@@ -1,6 +1,8 @@
 #include <vector>
 #include <array>
+#include <string>
 #include "util/vec3.h"
+#include "util/obj_parser.h"
 #include "hitable/sphere.h"
 #include "hitable/cube.h"
 #include "hitable/triangle.h"
@@ -23,20 +25,26 @@ void Scene::build() {
   Hitable* el_7 = new Triangle(vec3(-1,0,-1), vec3(-1,-1,1), vec3(1,0,1), new Lambertian(vec3(1,0,0)));
   Hitable* el_8 = new Triangle(vec3(1,0,1), vec3(1,-1,-1), vec3(-1,0,-1), new Lambertian(vec3(1,0,0)));
 
+  ObjParser obj_parser;
+
+  Hitable* el_9 = obj_parser.parse("teapot.obj");
+  el_9->material_ptr = new Lambertian(vec3(0.5));
+
+  /*
   std::vector<vec3> vertices = {
     vec3(-1,0,-1), vec3(-1,-1,1), vec3(1,0,1), vec3(1,-1,-1)
   };
 
-  std::vector<std::array<int, 3>> faces = { {0,1,2}, {2,3,0} };
+  std::vector<std::array<unsigned int, 3>> faces = { {0,1,2}, {2,3,0} };
 
   Hitable* el_9 = new TriangleMesh(vertices, faces, new Lambertian(vec3(0.5)));
-
+  */
   //world = {el_1, el_2, el_3, el_4, el_6};
   world = {el_3, el_9};
 
-  ambient_light = new AmbientLight(vec3(1), 0.5);
+  ambient_light = new AmbientLight(vec3(1), 0.6);
 
-  lights = { new PointLight(vec3(0.0, 1.0, 0.5), vec3(1.0), 3.25) }; 
+  lights = { new PointLight(vec3(0.0, 4.0, 4), vec3(1.0), 2.25) }; 
 }
 
 void Scene::setWorld(std::vector<Hitable*> v_hitable) {

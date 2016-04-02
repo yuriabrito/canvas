@@ -4,12 +4,12 @@
 namespace canvas {
 
 TriangleMesh::TriangleMesh(const std::vector<vec3>& vertices,
-    const std::vector<std::array<int, 3>>& faces) : vertices(vertices), faces(faces) {
+    const std::vector<std::array<unsigned int, 3>>& faces) : vertices(vertices), faces(faces) {
   flatTriangles();
 }
 
 TriangleMesh::TriangleMesh(const std::vector<vec3>& vertices,
-    const std::vector<std::array<int, 3>>& faces,
+    const std::vector<std::array<unsigned int, 3>>& faces,
     Material* material_ptr) :
   vertices(vertices), faces(faces), Hitable(material_ptr) {
     flatTriangles();
@@ -32,30 +32,44 @@ bool TriangleMesh::hit(const ray& r, float t_min, float t_max, hit_record& rec) 
 // refactor t_min
 bool TriangleMesh::hitTriangle(const int face_index,
     const ray& r, float t_min, float t_max, hit_record& rec) const {
-  std::array<int, 3> face = faces[face_index];
+  std::array<unsigned int, 3> face = faces[face_index];
   vec3 normal = normals[face_index];
+  vec3 a, b, c;
+  a = vertices[face[0]];
+  b = vertices[face[1]];
+  c = vertices[face[2]];
 
-  vec3 a = vertices[face[0]];
-  vec3 b = vertices[face[1]];
-  vec3 c = vertices[face[2]];
+  vec3 e1, e2;
+  e1 = b - a;
+  e2 = c - a;
 
-  float t = normal * (a - r.o) / (normal * r.d);
-  
-  if(t < t_min || t > t_max) return false;
+  vec3 P = r.d ^ e2;
+  float det = e1 * P;
+  if(det > -0.0001 && det < 0.0001) return false;
 
-  vec3 p = r.point_at_parameter(t);
+  float inv_det = 1.0 / det;
 
-  vec3 ba = b - a; vec3 cb = c - b; vec3 ac = a - c;
-  
-  if(((ba ^ (p - a)) * normal) < 0.001 ||
-      ((cb ^ (p - b)) * normal) < 0.001 ||
-      ((ac ^ (p - c)) * normal) < 0.001) return false;
+  vec3 T = r.o - a;
 
-  rec.t = t;
-  rec.p = p;
-  rec.normal = normal;
-  rec.material_ptr = material_ptr;
-  return true;
+  float u = (T * P) * inv_det;
+  if(u < 0.0 || u > 1.0) return false;
+
+  vec3 Q = T ^ e1;
+
+  float v = (r.d * Q) * inv_det;
+  if(v < 0.0 || u + v > 1.0) return false;
+
+  float t = (e2 * Q) * inv_det;
+
+  if(t > t_min) {
+    rec.t = t;
+    rec.p = r.point_at_parameter(t);
+    rec.normal = normal;
+    rec.material_ptr = material_ptr;
+    return true;
+  }
+
+  return false;
 }
 
 void TriangleMesh::smoothTriangles() {}
