@@ -1,12 +1,11 @@
 #include <vector>
 #include <array>
 #include <string>
+#include <cmath>
 #include "util/vec3.h"
 #include "util/obj_parser.h"
 #include "hitable/sphere.h"
-#include "hitable/cube.h"
-#include "hitable/triangle.h"
-#include "hitable/triangle_mesh.h"
+#include "hitable/bvh_node.h"
 #include "material/lambertian.h"
 #include "material/metal.h"
 #include "material/dielectric.h"
@@ -21,17 +20,12 @@ void Scene::build() {
   Hitable* el_3 = new Sphere(vec3(1,0,-1), 0.5, new Metal(vec3(0.8, 0.6, 0.2), 0.2));
   Hitable* el_4 = new Sphere(vec3(-1,0,-1), 0.5, new Lambertian(vec3(0.1, 0.2, 0.5)));
   Hitable* el_5 = new Sphere(vec3(0,1,-2), 0.5, new Lambertian(vec3(0.5, 0.0, 0.0)));
-  Hitable* el_6 = new Cube(vec3(0,0,-1), 0.25, new Lambertian(vec3(0.5,0,0.5)));
-  Hitable* el_7 = new Triangle(vec3(-1,0,-1), vec3(-1,-1,1), vec3(1,0,1), new Lambertian(vec3(1,0,0)));
-  Hitable* el_8 = new Triangle(vec3(1,0,1), vec3(1,-1,-1), vec3(-1,0,-1), new Lambertian(vec3(1,0,0)));
-
+  
   ObjParser obj_parser;
 
   Hitable* el_9 = obj_parser.parse("gourd.obj");
   el_9->material_ptr = new Lambertian(vec3(0.5));
-
-  /*
-  std::vector<vec3> vertices = {
+  /*  std::vector<vec3> vertices = {
     vec3(-1,0,-1), vec3(-1,-1,1), vec3(1,0,1), vec3(1,-1,-1)
   };
 
@@ -39,12 +33,19 @@ void Scene::build() {
 
   Hitable* el_9 = new TriangleMesh(vertices, faces, new Lambertian(vec3(0.5)));
   */
-  //world = {el_1, el_2, el_3, el_4, el_6};
-  world = {el_3, el_9};
+  Hitable** v = new Hitable*[2];
+  v[0] = el_1;
+  v[1] = el_9;
+  //v[2] = el_3;
+  //v[3] = el_4;
+  BVHNode* b_1 = new BVHNode(v, 2, 0.001, MAXFLOAT);
+  //world = {b_1};
+  world = {el_1, el_9};
+  //world = {el_3, el_9};
 
-  ambient_light = new AmbientLight(vec3(1), 1.0);
+  ambient_light = new AmbientLight(vec3(1), 0.5);
 
-  lights = { new PointLight(vec3(0.0, 4.0, 4), vec3(1.0), 2.25) };
+  lights = { new PointLight(vec3(0.0, 4.0, 4), vec3(1.0), 2.5) };
   //lights = {};
 }
 

@@ -1,4 +1,5 @@
 #include <cmath>
+#include <algorithm>
 #include "triangle_mesh.h"
 
 namespace canvas {
@@ -27,6 +28,20 @@ bool TriangleMesh::hit(const ray& r, float t_min, float t_max, hit_record& rec) 
     }
   }
   return hit_anything;
+}
+
+bool TriangleMesh::boundingBox(float t0, float t1, AABB& box) const {
+  vec3 _min = MAXFLOAT, _max = -10000.0;
+  for(const auto& v : vertices) {
+    _min[0] = std::min(_min[0], v[0]);
+    _min[1] = std::min(_min[1], v[1]);
+    _min[2] = std::min(_min[2], v[2]);
+    _max[0] = std::max(_max[0], v[0]);
+    _max[1] = std::max(_max[1], v[1]);
+    _max[2] = std::max(_max[2], v[2]);
+  }
+  box = AABB(_min, _max);
+  return true;
 }
 
 // refactor t_min

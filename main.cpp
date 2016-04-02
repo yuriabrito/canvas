@@ -34,8 +34,8 @@ void render(const Scene& scene, const Camera& camera, Image& image) {
 }
 
 int main() {
-  int nx = 400;
-  int ny = 300;
+  int nx = 500;
+  int ny = 400;
   
   Image image(nx, ny);
 

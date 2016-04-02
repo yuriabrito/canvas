@@ -21,6 +21,13 @@ bool HitableList::hit(const ray& r, float t_min, float t_max, hit_record& rec) c
   return hit_anything;
 }
 
+bool HitableList::boundingBox(float t0, float t1, AABB& box) const {
+  // should have bounding box?? try not!
+  //vec3 _min, _max;
+  // get min of all x,y,z for box._min
+  return false;
+}
+
 HitableList& HitableList::operator+=(Hitable* el) {
   list.push_back(el);
   return *this;
