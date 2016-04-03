@@ -2,7 +2,7 @@
 #define UTIL_KDNODEH
 
 #include <vector>
-#include "hitable/triangle.h"
+#include "hitable/hitable.h"
 #include "aabb.h"
 
 namespace canvas {
@@ -12,10 +12,10 @@ public:
   AABB box;
   KDNode* left;
   KDNode* right;
-  std::vector<Triangle*> triangles;
+  std::vector<Hitable*> hitables;
 public:
   KDNode() {}
-  KDNode* build(std::vector<Triangle*>& vt, int depth) const;
+  KDNode* build(std::vector<Hitable*>& vh, int depth) const;
   bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
 };
 

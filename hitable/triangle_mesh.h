@@ -20,6 +20,7 @@ public:
   TriangleMesh(const vector<vec3>& vertices, const vector<vec3>& normals,
       const vector<array<size_t, 3>>& faces, Material* material_ptr);
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
+  virtual bool boundingBox(AABB& box) const;
 };
 
 }

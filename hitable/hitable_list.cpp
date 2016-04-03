@@ -21,6 +21,19 @@ bool HitableList::hit(const ray& r, float t_min, float t_max, hit_record& rec) c
   return hit_anything;
 }
 
+bool HitableList::boundingBox(AABB& box) const {
+  AABB b;
+  bool has_box = false;
+  for(const auto& h : list) {
+    if(has_box && h->boundingBox(b)) box.expand(b);
+    else if(h->boundingBox(b)) {
+      box = b;
+      has_box = true;
+    } 
+  }
+  return has_box;
+}
+
 HitableList& HitableList::operator+=(Hitable* el) {
   list.push_back(el);
   return *this;

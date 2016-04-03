@@ -49,7 +49,7 @@ bool Triangle::hit(const ray& r, float t_min, float t_max, hit_record& rec) cons
   return true;
 }
 
-bool Triangle::boundingBox(AABB& box) {
+bool Triangle::boundingBox(AABB& box) const {
   float ERR = 0.001;
   vec3 _min, _max;
   _min[0] = std::min({a[0], b[0], c[0]}) - ERR;
