@@ -1,4 +1,6 @@
 #include "triangle.h"
+#include <cmath>
+#include <algorithm>
 #include "triangle_mesh.h"
 
 namespace canvas {
@@ -18,7 +20,7 @@ TriangleMesh::TriangleMesh(const std::vector<vec3>& vertices, const std::vector<
     const std::vector<std::array<size_t, 3>>& faces, Material* material_ptr)
   : TriangleMesh(vertices, normals, faces) {
     this->material_ptr = material_ptr;
-}
+  }
 
 bool TriangleMesh::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
   bool hit_anything = kd_node->hit(r, t_min, t_max, rec);

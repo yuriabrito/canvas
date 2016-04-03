@@ -1,6 +1,7 @@
 #include <vector>
 #include <array>
 #include <string>
+#include <cmath>
 #include "util/vec3.h"
 #include "util/obj_parser.h"
 #include "hitable/sphere.h"
@@ -35,6 +36,7 @@ void Scene::build() {
   ambient_light = new AmbientLight(vec3(1), 0.3);
 
   lights = { new PointLight(vec3(-0.75, 3.25, 1.5), vec3(1.0), 5.5) };
+
   //lights = {};
 }
 
