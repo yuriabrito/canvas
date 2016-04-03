@@ -4,7 +4,6 @@
 #include "util/vec3.h"
 #include "util/obj_parser.h"
 #include "hitable/sphere.h"
-#include "hitable/cube.h"
 #include "hitable/triangle.h"
 #include "hitable/triangle_mesh.h"
 #include "material/lambertian.h"
@@ -21,30 +20,21 @@ void Scene::build() {
   Hitable* el_3 = new Sphere(vec3(1,0,-1), 0.5, new Metal(vec3(0.8, 0.6, 0.2), 0.2));
   Hitable* el_4 = new Sphere(vec3(-1,0,-1), 0.5, new Lambertian(vec3(0.1, 0.2, 0.5)));
   Hitable* el_5 = new Sphere(vec3(0,1,-2), 0.5, new Lambertian(vec3(0.5, 0.0, 0.0)));
-  Hitable* el_6 = new Cube(vec3(0,0,-1), 0.25, new Lambertian(vec3(0.5,0,0.5)));
-  Hitable* el_7 = new Triangle(vec3(-1,0,-1), vec3(-1,-1,1), vec3(1,0,1), new Lambertian(vec3(1,0,0)));
-  Hitable* el_8 = new Triangle(vec3(1,0,1), vec3(1,-1,-1), vec3(-1,0,-1), new Lambertian(vec3(1,0,0)));
 
   ObjParser obj_parser;
 
-  Hitable* el_9 = obj_parser.parse("gourd.obj");
-  el_9->material_ptr = new Lambertian(vec3(0.5));
+  std::vector<vec3> vertices, normals;
+  std::vector<std::array<size_t, 3>> faces;
 
-  /*
-  std::vector<vec3> vertices = {
-    vec3(-1,0,-1), vec3(-1,-1,1), vec3(1,0,1), vec3(1,-1,-1)
-  };
+  obj_parser.parse("gourd.obj", vertices, normals, faces);
+  Hitable* gourd = new TriangleMesh(vertices, normals, faces, new Lambertian(vec3(0.5, 0.3, 0.0)));
 
-  std::vector<std::array<unsigned int, 3>> faces = { {0,1,2}, {2,3,0} };
-
-  Hitable* el_9 = new TriangleMesh(vertices, faces, new Lambertian(vec3(0.5)));
-  */
   //world = {el_1, el_2, el_3, el_4, el_6};
-  world = {el_3, el_9};
+  world = {el_3, gourd};
 
   ambient_light = new AmbientLight(vec3(1), 1.0);
 
-  lights = { new PointLight(vec3(0.0, 4.0, 4), vec3(1.0), 2.25) };
+  lights = { new PointLight(vec3(-0.5, 3.0, 2), vec3(1.0), 2.25) };
   //lights = {};
 }
 

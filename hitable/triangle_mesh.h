@@ -8,17 +8,19 @@
 
 namespace canvas {
 
+using std::vector;
+using std::array;
+
 class TriangleMesh : public Hitable {
 private:
-  std::vector<vec3> vertices;
-  std::vector<std::array<unsigned int, 3>> faces;
-  std::vector<vec3> normals; // vertices
+  vector<vec3> vertices;
+  vector<array<size_t, 3>> faces;
+  vector<vec3> normals; // vertices
 public:
-  TriangleMesh(const std::vector<vec3>& vertices, const std::vector<vec3>& normals, const std::vector<std::array<unsigned int, 3>>& faces);
-  TriangleMesh(const std::vector<vec3>& vertices, const std::vector<std::array<unsigned int, 3>>& faces, Material* material_ptr);
+  TriangleMesh(const vector<vec3>& vertices, const vector<vec3>& normals, const vector<array<size_t, 3>>& faces);
+  TriangleMesh(const vector<vec3>& vertices, const vector<vec3>& normals,
+      const vector<array<size_t, 3>>& faces, Material* material_ptr);
   virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
-  void smoothTriangles();
-  void flatTriangles();
 private:
   bool hitTriangle(const int face_index, const ray& r, float t_min, float t_max, hit_record& rec) const;
 };

@@ -4,16 +4,13 @@
 namespace canvas {
 
 TriangleMesh::TriangleMesh(const std::vector<vec3>& vertices, const std::vector<vec3>& normals,
-    const std::vector<std::array<unsigned int, 3>>& faces) : vertices(vertices), normals(normals), faces(faces) {
-  //flatTriangles();
+    const std::vector<std::array<size_t, 3>>& faces) : vertices(vertices), normals(normals), faces(faces) {
 }
 
-TriangleMesh::TriangleMesh(const std::vector<vec3>& vertices,
-    const std::vector<std::array<unsigned int, 3>>& faces,
-    Material* material_ptr) :
-  vertices(vertices), faces(faces), Hitable(material_ptr) {
-    flatTriangles();
-  }
+TriangleMesh::TriangleMesh(const std::vector<vec3>& vertices, const std::vector<vec3>& normals,
+    const std::vector<std::array<size_t, 3>>& faces, Material* material_ptr) :
+  vertices(vertices), faces(faces), normals(normals), Hitable(material_ptr) {
+}
 
 bool TriangleMesh::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
   bool hit_anything = false;
@@ -32,8 +29,7 @@ bool TriangleMesh::hit(const ray& r, float t_min, float t_max, hit_record& rec) 
 // refactor t_min
 bool TriangleMesh::hitTriangle(const int face_index,
     const ray& r, float t_min, float t_max, hit_record& rec) const {
-  std::array<unsigned int, 3> face = faces[face_index];
-  //vec3 normal = normals[face_index];
+  std::array<size_t, 3> face = faces[face_index];
   vec3 a, b, c;
   a = vertices[face[0]]; // v0
   b = vertices[face[1]]; // v1
@@ -71,15 +67,6 @@ bool TriangleMesh::hitTriangle(const int face_index,
   }
 
   return false;
-}
-
-void TriangleMesh::smoothTriangles() {
-}
-
-void TriangleMesh::flatTriangles() {
-  for(int i = 0; i < faces.size(); i++) {
-    normals.push_back((vertices[faces[i][0]] ^ vertices[faces[i][1]]).hat());
-  }
 }
 
 }
