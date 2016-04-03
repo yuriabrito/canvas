@@ -5,7 +5,6 @@
 #include <array>
 #include "util/vec3.h"
 #include "util/kd_node.h"
-#include "triangle.h"
 #include "hitable.h"
 
 namespace canvas {

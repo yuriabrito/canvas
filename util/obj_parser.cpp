@@ -28,17 +28,19 @@ void ObjParser::parse(const string& file_path, vector<vec3>& vertices,
   size_t n_vertices = shapes[i].mesh.positions.size() / 3;
   size_t n_faces = shapes[i].mesh.indices.size() / 3;
 
+  vector<size_t> v_degree(n_vertices, 0);
   vertices.resize(n_vertices);
   normals.resize(n_vertices);
   faces.reserve(n_faces);
 
-  for (size_t v = 0; v < n_vertices; v++) {
+  for(size_t v = 0; v < n_vertices; v++) {
     vertices[v] = vec3(shapes[i].mesh.positions[3*v+0],
       shapes[i].mesh.positions[3*v+1],
       shapes[i].mesh.positions[3*v+2]);
+    normals[v] = vec3(0);
   }
 
-  for (size_t f = 0; f < n_faces; f++) {
+  for(size_t f = 0; f < n_faces; f++) {
     unsigned int v0, v1, v2;
     v0 = shapes[i].mesh.indices[3*f+0];
     v1 = shapes[i].mesh.indices[3*f+1];

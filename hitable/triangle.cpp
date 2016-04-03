@@ -1,3 +1,4 @@
+#include <cmath>
 #include "triangle.h"
 
 namespace canvas {
@@ -15,44 +16,48 @@ bool Triangle::hit(const ray& r, float t_min, float t_max, hit_record& rec) cons
   e1 = b - a;
   e2 = c - a;
 
+  float ERR = 0.001;
+
   vec3 P = r.d ^ e2;
   float det = e1 * P;
-  if(det > -0.00001 && det < 0.00001) return false;
+  if(det > -ERR && det < ERR) return false;
 
   float inv_det = 1.0 / det;
 
   vec3 T = r.o - a;
 
   float u = (T * P) * inv_det;
-  if(u < 0.00001 || u > 1.0) return false;
+  if(u < 0.0 || u > 1.0) return false;
 
   vec3 Q = T ^ e1;
 
   float v = (r.d * Q) * inv_det;
-  if(v < 0.00001 || u + v > 1.0) return false;
+  if(v < 0.0 || v > 1.0) return false;
+  if(u + v > 1.0) return false;
 
   float t = (e2 * Q) * inv_det;
+  
 
-  if(t > t_min) {
-    vec3 normal = (1-u-v) * n_a + u * n_b + v * n_c;
-    rec.t = t;
-    rec.p = r.point_at_parameter(t);
-    rec.normal = normal;
-    rec.material_ptr = material_ptr;
-    return true;
-  }
+  if(t < t_min) return false;
 
-  return false;
+  vec3 normal = ((1.0-u-v) * n_a + u * n_b + v * n_c).hat();
+  //vec3 normal = a ^ b;
+  rec.t = t;
+  rec.p = r.point_at_parameter(t);
+  rec.normal = normal;
+  rec.material_ptr = material_ptr;
+  return true;
 }
 
 bool Triangle::boundingBox(AABB& box) {
+  float ERR = 0.001;
   vec3 _min, _max;
-  _min[0] = std::min({a[0], b[0], c[0]});
-  _min[1] = std::min({a[1], b[1], c[1]});
-  _min[2] = std::min({a[2], b[2], c[2]});
-  _max[0] = std::max({a[0], b[0], c[0]});
-  _max[1] = std::max({a[1], b[1], c[1]});
-  _max[2] = std::max({a[2], b[2], c[2]});
+  _min[0] = std::min({a[0], b[0], c[0]}) - ERR;
+  _min[1] = std::min({a[1], b[1], c[1]}) - ERR;
+  _min[2] = std::min({a[2], b[2], c[2]}) - ERR;
+  _max[0] = std::max({a[0], b[0], c[0]}) + ERR;
+  _max[1] = std::max({a[1], b[1], c[1]}) + ERR;
+  _max[2] = std::max({a[2], b[2], c[2]}) + ERR;
   box = AABB(_min, _max);
   return true;
 }

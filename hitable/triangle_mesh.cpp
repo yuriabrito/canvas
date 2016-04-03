@@ -1,4 +1,3 @@
-#include <cmath>
 #include "triangle.h"
 #include "triangle_mesh.h"
 

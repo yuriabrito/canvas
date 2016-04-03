@@ -27,7 +27,7 @@ KDNode* KDNode::build(std::vector<Triangle*>& vt, int depth) const {
     AABB b;
     t->boundingBox(b);
     node->box.expand(b);
-    mid_point += (b._max - b._min);
+    mid_point += (b._max + b._min);
   }
   mid_point *= 0.5 * inv_size;
 
@@ -36,7 +36,7 @@ KDNode* KDNode::build(std::vector<Triangle*>& vt, int depth) const {
   for(const auto& t : vt) {
     AABB b;
     t->boundingBox(b);
-    vec3 mpt = (b._max - b._min) * 0.5;
+    vec3 mpt = (b._max + b._min) * 0.5;
     if(axis == Axis::X) mid_point[0] >= mpt[0] ? vt_right.push_back(t) : vt_left.push_back(t);
     if(axis == Axis::Y) mid_point[1] >= mpt[1] ? vt_right.push_back(t) : vt_left.push_back(t);
     if(axis == Axis::Z) mid_point[2] >= mpt[2] ? vt_right.push_back(t) : vt_left.push_back(t);
@@ -47,7 +47,7 @@ KDNode* KDNode::build(std::vector<Triangle*>& vt, int depth) const {
 
   size_t matches = 0;
   for(int i = 0; i < vt_left.size(); i++) {
-    for(int j = 0; j < vt_left.size(); j++) {
+    for(int j = 0; j < vt_right.size(); j++) {
       if(vt_left[i] == vt_right[j]) matches++;
     }
   }
@@ -69,26 +69,21 @@ bool KDNode::hit(const ray& r, float t_min, float t_max, hit_record& rec) const 
   
   vec3 normal;
   bool hit_anything = false;
-  hit_record rec_tmp;
-  
+    
   if(left->triangles.size() > 0 && right->triangles.size() > 0) {
-    bool hit_left = left->hit(r, t_min, t_max, rec);
-    bool hit_right = right->hit(r, t_min, t_max, rec_tmp);
+    hit_record rec_left, rec_right;
+    bool hit_left = left->hit(r, t_min, t_max, rec_left);
+    bool hit_right = right->hit(r, t_min, t_max, rec_right);
     if(hit_left && hit_right) {
-      if(rec.t < rec_tmp.t) return true;
-      else {
-        rec = rec_tmp;
-        return true;
-      }
+      rec = (rec_left.t < rec_right.t ? rec_left : rec_right);
     }
-    else if(hit_right) {
-      rec = rec_tmp;
-      return true;
-    }
-    else return hit_left;
+    else if(hit_left) rec = rec_left;
+    else if(hit_right) rec = rec_right;
+    return hit_left || hit_right;
   }
   else {
     // leaf
+    hit_record rec_tmp;
     float closest_so_far = MAXFLOAT;
     for(const auto& t : triangles) {
       if(t->hit(r, t_min, t_max, rec_tmp) && rec_tmp.t < closest_so_far) {
