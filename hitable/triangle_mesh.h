@@ -4,7 +4,7 @@
 #include <vector>
 #include <array>
 #include "util/vec3.h"
-#include "util/aabb.h"
+#include "util/kd_node.h"
 #include "triangle.h"
 #include "hitable.h"
 
@@ -15,7 +15,7 @@ using std::array;
 
 class TriangleMesh : public Hitable {
 private:
-  std::vector<Triangle*> triangles;
+  KDNode* kd_node;
 public:
   TriangleMesh(const vector<vec3>& vertices, const vector<vec3>& normals, const vector<array<size_t, 3>>& faces);
   TriangleMesh(const vector<vec3>& vertices, const vector<vec3>& normals,

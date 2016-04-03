@@ -13,6 +13,7 @@ public:
   vec3 _min;
   vec3 _max;
 public:
+  AABB() {}
   AABB(const vec3& _min, const vec3& _max);
   Axis longestAxis() const;
   void expand(const AABB& box);

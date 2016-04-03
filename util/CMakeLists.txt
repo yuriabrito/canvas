@@ -10,6 +10,7 @@ set(util_SRC
   worker.cpp worker.h
   obj_parser.cpp obj_parser.h
   aabb.cpp aabb.h
+  kd_node.cpp kd_node.h
   )
 
 add_library(util ${util_SRC})
