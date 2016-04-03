@@ -2,45 +2,59 @@
 
 namespace canvas {
 
-Triangle::Triangle() {
-  create(vec3(0,1,0), vec3(1.366, -1.366, 0), vec3(-1.366, -1.366, 0));
-}
+Triangle::Triangle(const vec3& a, const vec3& b, const vec3& c,
+      const vec3& n_a, const vec3& n_b, const vec3& n_c)
+  : a(a), b(b), c(c), n_a(n_a), n_b(n_b), n_c(n_c) {}
 
-Triangle::Triangle(Material* material_ptr) : Triangle() {
-  this->material_ptr = material_ptr;
-}
-
-Triangle::Triangle(const vec3& a, const vec3& b, const vec3& c) {
-  create(a, b, c);
-}
-
-Triangle::Triangle(const vec3& a, const vec3& b, const vec3& c, Material* material_ptr) : Triangle(a,b,c) {
-  this->material_ptr = material_ptr;
-}
+Triangle::Triangle(const vec3& a, const vec3& b, const vec3& c,
+      const vec3& n_a, const vec3& n_b, const vec3& n_c, Material* material_ptr)
+  : a(a), b(b), c(c), n_a(n_a), n_b(n_b), n_c(n_c), Hitable(material_ptr) {}
 
 bool Triangle::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
-  float t = normal * (a - r.o) / (normal * r.d);
-  
-  if(t < t_min || t > t_max) return false;
+  vec3 e1, e2;
+  e1 = b - a;
+  e2 = c - a;
 
-  vec3 p = r.point_at_parameter(t);
+  vec3 P = r.d ^ e2;
+  float det = e1 * P;
+  if(det > -0.00001 && det < 0.00001) return false;
 
-  if(((ba ^ (p - a)) * normal) < 0.001 ||
-      ((cb ^ (p - b)) * normal) < 0.001 ||
-      ((ac ^ (p - c)) * normal) < 0.001) return false;
+  float inv_det = 1.0 / det;
 
-  rec.t = t;
-  rec.p = p;
-  rec.normal = normal;
-  rec.material_ptr = material_ptr;
-  return true;
+  vec3 T = r.o - a;
+
+  float u = (T * P) * inv_det;
+  if(u < 0.00001 || u > 1.0) return false;
+
+  vec3 Q = T ^ e1;
+
+  float v = (r.d * Q) * inv_det;
+  if(v < 0.00001 || u + v > 1.0) return false;
+
+  float t = (e2 * Q) * inv_det;
+
+  if(t > t_min) {
+    vec3 normal = (1-u-v) * n_a + u * n_b + v * n_c;
+    rec.t = t;
+    rec.p = r.point_at_parameter(t);
+    rec.normal = normal;
+    rec.material_ptr = material_ptr;
+    return true;
+  }
+
+  return false;
 }
 
-void Triangle::create(const vec3& a, const vec3& b, const vec3& c) {
-  this->a = a; this->b = b; this->c = c;
-  ba = b - a, cb = c - b, ac = a - c;
-  normal = - ba ^ ac;
-  normal.normalize();
+bool Triangle::boundingBox(AABB& box) {
+  vec3 _min, _max;
+  _min[0] = std::min({a[0], b[0], c[0]});
+  _min[1] = std::min({a[1], b[1], c[1]});
+  _min[2] = std::min({a[2], b[2], c[2]});
+  _max[0] = std::max({a[0], b[0], c[0]});
+  _max[1] = std::max({a[1], b[1], c[1]});
+  _max[2] = std::max({a[2], b[2], c[2]});
+  box = AABB(_min, _max);
+  return true;
 }
 
 }
