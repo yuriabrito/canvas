@@ -9,6 +9,7 @@ set(util_SRC
   scene.cpp scene.h
   worker.cpp worker.h
   obj_parser.cpp obj_parser.h
+  aabb.cpp aabb.h
   )
 
 add_library(util ${util_SRC})

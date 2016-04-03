@@ -17,7 +17,7 @@ bool TriangleMesh::hit(const ray& r, float t_min, float t_max, hit_record& rec) 
   float closest_so_far = MAXFLOAT;
   hit_record rec_tmp;
   for(int i = 0; i < faces.size(); i++) {
-    if(hitTriangle(i, r, 0.001, t_max, rec_tmp) && rec_tmp.t < closest_so_far) {
+    if(faceHit(i, r, 0.001, t_max, rec_tmp) && rec_tmp.t < closest_so_far) {
       hit_anything = true;
       closest_so_far = rec_tmp.t;
       rec = rec_tmp;
@@ -27,7 +27,7 @@ bool TriangleMesh::hit(const ray& r, float t_min, float t_max, hit_record& rec) 
 }
 
 // refactor t_min
-bool TriangleMesh::hitTriangle(const int face_index,
+bool TriangleMesh::faceHit(const int face_index,
     const ray& r, float t_min, float t_max, hit_record& rec) const {
   std::array<size_t, 3> face = faces[face_index];
   vec3 a, b, c;
