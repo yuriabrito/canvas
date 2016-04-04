@@ -11,7 +11,7 @@ namespace canvas {
 
 class Scene {
 public:
-  HitableList world;
+  HitableList* world;
   AmbientLight* ambient_light;
   std::vector<Light*> lights;
 public:

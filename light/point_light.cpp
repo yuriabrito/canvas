@@ -17,24 +17,19 @@ vec3 PointLight::L(hit_record& rec) {
   return ls * color;
 }
 
-bool PointLight::inShadow(const ray& r, const HitableList& world) const {
-  int n_hitables = world.list.size();
+bool PointLight::inShadow(const ray& r, const Hitable* h) const {
   float d = (point - r.o).length();
   bool in_shadow = false;
 
   hit_record rec;
-  for(int j = 0; j < n_hitables; j++) {
-    if(world.list[j]->hit(r, 0.001, MAXFLOAT, rec) && rec.t < d) {
-      in_shadow = true;
-    }
-  }
+  if(h->hit(r, 0.001, MAXFLOAT, rec) && rec.t < d) in_shadow = true;
 
   if(in_shadow && rec.material_ptr->transmit()) {
     vec3 attenuation;
     ray scattered;
     rec.material_ptr->scatter(ray(rec.p, r.d), rec, attenuation, scattered);
     float cosine = scattered.d * r.d;
-    if(cosine > 0.001 && drand48() < cosine) return inShadow(scattered, world);  
+    if(cosine > 0.001 && drand48() < cosine) return inShadow(scattered, h);  
   }
 
   return in_shadow;

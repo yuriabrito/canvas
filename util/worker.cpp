@@ -10,7 +10,7 @@ namespace canvas {
 
 vec3 color(const ray& r, const Scene& scene, int depth) {
   hit_record rec;
-  if(scene.world.hit(r, 0.001, MAXFLOAT, rec)) {
+  if(scene.world->hit(r, 0.001, MAXFLOAT, rec)) {
     ray scattered;
     vec3 attenuation;
     if(depth < 50 && rec.material_ptr->scatter(r, rec, attenuation, scattered)) {

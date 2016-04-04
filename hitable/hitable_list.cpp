@@ -2,9 +2,9 @@
 
 namespace canvas {
 
-HitableList::HitableList(std::vector<Hitable*>& v) : list(v), Hitable(nullptr) {}
+HitableList::HitableList(const std::vector<Hitable*>& v) : list(v), Hitable(nullptr) {}
 
-HitableList::HitableList(std::vector<Hitable*>& v, Material* material_ptr) : list(v), Hitable(material_ptr) {}
+HitableList::HitableList(const std::vector<Hitable*>& v, Material* material_ptr) : list(v), Hitable(material_ptr) {}
 
 bool HitableList::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
   hit_record tmp_rec;
@@ -32,6 +32,14 @@ bool HitableList::boundingBox(AABB& box) const {
     } 
   }
   return has_box;
+}
+
+void HitableList::set(const std::vector<Hitable*> v) {
+  list = v;
+}
+
+void HitableList::append(Hitable* h) {
+  list.push_back(h);
 }
 
 HitableList& HitableList::operator+=(Hitable* el) {

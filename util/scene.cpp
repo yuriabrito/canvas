@@ -31,7 +31,7 @@ void Scene::build() {
   Hitable* gourd = new TriangleMesh(vertices, normals, faces, new Lambertian(0.9));
 
   //world = {el_1, el_2, el_3, el_4, el_6};
-  world = {el_2, gourd};
+  world = new HitableList({el_2, gourd});
 
   ambient_light = new AmbientLight(vec3(1), 0.3);
 
@@ -41,11 +41,11 @@ void Scene::build() {
 }
 
 void Scene::setWorld(std::vector<Hitable*> v_hitable) {
-  world = v_hitable;
+  world->set(v_hitable);
 }
 
 void Scene::addHitable(Hitable* hitable) {
-  world += hitable;
+  world->append(hitable);
 }
 
 void Scene::setAmbientLight(AmbientLight* ambient_light) {
