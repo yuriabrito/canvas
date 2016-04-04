@@ -41,7 +41,7 @@ bool Triangle::hit(const ray& r, float t_min, float t_max, hit_record& rec) cons
   if(t < t_min) return false;
 
   vec3 normal = ((1.0-u-v) * n_a + u * n_b + v * n_c).hat();
-  //vec3 normal = a ^ b;
+  //vec3 normal = e1 ^ e2;
   rec.t = t;
   rec.p = r.point_at_parameter(t);
   rec.normal = normal;

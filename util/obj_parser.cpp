@@ -45,7 +45,7 @@ void ObjParser::parse(const string& file_path, vector<vec3>& vertices,
     v0 = shapes[i].mesh.indices[3*f+0];
     v1 = shapes[i].mesh.indices[3*f+1];
     v2 = shapes[i].mesh.indices[3*f+2];
-    vec3 normal = vertices[v0] ^ vertices[v1];
+    vec3 normal = (vertices[v1] - vertices[v0]) ^ (vertices[v2] - vertices[v0]);
     normals[v0] += normal;
     normals[v1] += normal;
     normals[v2] += normal;

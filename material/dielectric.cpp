@@ -52,7 +52,7 @@ bool Dielectric::scatter(const ray& r_in, const hit_record& rec, vec3& attenuati
 }
 
 bool Dielectric::transmit() const {
-  return (transmissivity < drand48() ? true : false);
+  return (drand48() < transmissivity ? true : false);
 }
 
 }
