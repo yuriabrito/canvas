@@ -10,6 +10,8 @@
 #include "camera/camera.h"
 
 using std::cout;
+using std::cerr;
+using std::endl;
 using std::vector;
 using std::thread;
 using canvas::vec3;
@@ -26,11 +28,18 @@ void render(const Scene& scene, const Camera& camera, Image& image) {
 
   vector<thread> v_threads;
 
+  std::chrono::time_point<std::chrono::system_clock> start, end;
+  start = std::chrono::system_clock::now();
+
   for(int i=0; i<8; i++) {
     v_threads.push_back(std::thread(&Worker::work, worker, std::ref(scene), std::ref(camera), std::ref(image), ns, std::ref(coordinator)));
   }
 
   for(auto& t : v_threads) t.join();
+
+  end = std::chrono::system_clock::now();
+
+  cerr << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << endl;
 }
 
 int main() {

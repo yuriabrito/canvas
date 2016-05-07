@@ -43,16 +43,20 @@ void Worker::work(const Scene& scene, const Camera& camera, Image& image, int ns
   while(true) {
     Job job = coordinator.nextJob();
     if(job.x == -1) return;
-    vec3 col(0,0,0);
-    for(int s = 0; s < ns; s++) {
-      float u = float(job.x + drand48()) / float(image.width);
-      float v = float(job.y + drand48()) / float(image.height);
-      ray r = camera.getRay(u, v);
-      col += color(r, scene, 0); 
+    for(int j = job.y; j > job.y - job.ly; j--) {
+      for(int i = job.x; i < job.x + job.lx; i++) {
+        vec3 col(0,0,0);
+        for(int s = 0; s < ns; s++) {
+          float u = float(i + drand48()) / float(image.width);
+          float v = float(j + drand48()) / float(image.height);
+          ray r = camera.getRay(u, v);
+          col += color(r, scene, 0); 
+        }
+        col /= float(ns);
+        col = vec3(sqrt(col[0]), sqrt(col[1]), sqrt(col[2]));
+        image[j][i] = col;
+      }
     }
-    col /= float(ns);
-    col = vec3(sqrt(col[0]), sqrt(col[1]), sqrt(col[2]));
-    image[job.y][job.x] = col;
   }
 }
 
